@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
@@ -194,14 +195,25 @@ class SignUpView(APIView):
                 status=status.HTTP_200_OK,
             )
 
-        confirmation_code = uuid.uuid4()
+        # confirmation_code = uuid.uuid4()
 
-        User.objects.create(
+        # User.objects.create(
+        #     email=email,
+        #     username=str(username),
+        #     confirmation_code=confirmation_code,
+        #     is_active=False,
+        # )
+
+        # Для формирования confirmation_code как Token
+        user = User.objects.create(
             email=email,
             username=str(username),
-            confirmation_code=confirmation_code,
             is_active=False,
         )
+        confirmation_code = default_token_generator.make_token(user=user)
+        user.confirmation_code = confirmation_code
+        user.save()
+
         send_mail(
             "Account verification",
             "Your activation key {}".format(confirmation_code),
@@ -219,28 +231,36 @@ class TokenView(APIView):
         serializer = TokenSerializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
 
-        if not User.objects.filter(
-            username=serializer.data["username"]
-        ).exists():
+        username = serializer.data["username"]
+
+        if not User.objects.filter(username=username).exists():
             return Response(
                 "Такой username не существует",
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not len(serializer.data["confirmation_code"]) == 36:
+        user = User.objects.get(username=username)
+        confirmation_code = serializer.data["confirmation_code"]
+        if not default_token_generator.check_token(user, confirmation_code):
             return Response(
                 "Такой confirmation_code не существует",
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        confirmation_code = serializer.data["confirmation_code"]
-        if not User.objects.filter(
-            confirmation_code=confirmation_code
-        ).exists():
-            return Response(
-                "Такой confirmation_code не существует",
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        # if not len(serializer.data["confirmation_code"]) == 36:
+        #     return Response(
+        #         "Такой confirmation_code не существует",
+        #         status=status.HTTP_400_BAD_REQUEST,
+        #     )
+
+        # confirmation_code = serializer.data["confirmation_code"]
+        # if not User.objects.filter(
+        #     confirmation_code=confirmation_code
+        # ).exists():
+        #     return Response(
+        #         "Такой confirmation_code не существует",
+        #         status=status.HTTP_404_NOT_FOUND,
+        #     )
 
         user = get_object_or_404(User, confirmation_code=confirmation_code)
 

@@ -71,9 +71,14 @@ class MyUser(AbstractUser):
         choices=UserRole.choices,
         default=UserRole.USER,
     )
-    confirmation_code = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False,
+    # confirmation_code = models.UUIDField(
+    #     default=uuid.uuid4,
+    #     editable=False,
+    # )
+
+    # Для формирования confirmation_code как Token
+    confirmation_code = models.CharField(
+        max_length=25,
     )
 
     USERNAME_FIELD = "username"
