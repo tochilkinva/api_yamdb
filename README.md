@@ -1,5 +1,5 @@
 # Описание сервиса:
-### *Как Кинопоиск, толко хуже :)*
+### *Как Кинопоиск, только хуже :)*
 ### API для сервиса, который собирает отзывы на произведения искусства:
 - Кино
 - Музыка
@@ -56,31 +56,32 @@ python3 manage.py migrate
 
 загрузить категории
 ```
-python3 manage.py load_category_data
+python manage.py load_category_data
 ```
 загрузить жанры
 ```
-python3 manage.py load_genre_data
+python manage.py load_genre_data
 ```
 загрузить тайтлы
 ```
-python3 manage.py load_title_data
+python manage.py load_title_data
 ```
 ```
-python3 manage.py load_genre_title_data
-```
-загрузить отзывы
-```
-python3 manage.py load_review_data
-```
-загрузить коментарии
-```
-python3 manage.py load_comments_data
+python manage.py load_genre_title_data
 ```
 загрузить пользователей
 ```
-python3 manage.py load_users_data
+python manage.py load_users_data
 ```
+загрузить отзывы
+```
+python manage.py load_review_data
+```
+загрузить коментарии
+```
+python manage.py load_comments_data
+```
+
 
 ## Подробную документацию с примерами запросов вы найдете по адресу:
 http://127.0.0.1:8000/redoc/
