@@ -1,5 +1,3 @@
-import uuid
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
@@ -194,17 +192,7 @@ class SignUpView(APIView):
                 "Такой email уже зарегистрирован",
                 status=status.HTTP_200_OK,
             )
-
-        # confirmation_code = uuid.uuid4()
-
-        # User.objects.create(
-        #     email=email,
-        #     username=str(username),
-        #     confirmation_code=confirmation_code,
-        #     is_active=False,
-        # )
-
-        # Для формирования confirmation_code как Token
+        
         user = User.objects.create(
             email=email,
             username=str(username),
@@ -246,23 +234,6 @@ class TokenView(APIView):
                 "Такой confirmation_code не существует",
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
-        # if not len(serializer.data["confirmation_code"]) == 36:
-        #     return Response(
-        #         "Такой confirmation_code не существует",
-        #         status=status.HTTP_400_BAD_REQUEST,
-        #     )
-
-        # confirmation_code = serializer.data["confirmation_code"]
-        # if not User.objects.filter(
-        #     confirmation_code=confirmation_code
-        # ).exists():
-        #     return Response(
-        #         "Такой confirmation_code не существует",
-        #         status=status.HTTP_404_NOT_FOUND,
-        #     )
-
-        user = get_object_or_404(User, confirmation_code=confirmation_code)
 
         user.is_active = True
         user.save()
