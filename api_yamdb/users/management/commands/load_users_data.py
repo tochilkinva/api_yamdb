@@ -10,7 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         csv_filepath = "static/data/users.csv"
 
-        with open(csv_filepath, newline="") as csvfile:
+        with open(csv_filepath, newline="", encoding='utf-8') as csvfile:
             data_reader = csv.reader(
                 csvfile, delimiter=",", quotechar='"', skipinitialspace=True
             )
