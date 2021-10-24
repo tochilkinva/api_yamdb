@@ -1,5 +1,9 @@
 # Описание сервиса:
 ### *Как Кинопоиск, только хуже :)*
+
+### Технологии
+Python 3.7, Django 2.2.19, Django REST Framework
+
 ### API для сервиса, который собирает отзывы на произведения искусства:
 - Кино
 - Музыка
@@ -18,7 +22,7 @@
 Клонировать репозиторий и перейти в него в командной строке:
 
 ```
-git clone https://github.com/pakodev28/api_yamdb.git
+git clone https://github.com/tochilkinva/api_yamdb.git
 ```
 
 ```
@@ -32,7 +36,7 @@ python3 -m venv venv
 ```
 
 ```
-source venv/bin/activate
+source venv/Scripts/activate
 ```
 
 Установить зависимости из файла requirements.txt:
@@ -51,6 +55,11 @@ pip install -r requirements.txt
 python3 manage.py migrate
 ```
 
+Запустить проект из папки с manage.py:
+
+```
+python3 manage.py runserver
+```
 
 ## Команды для загрузки данных из csv в базу данных:
 
